@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css'
 
+
 function App() {
   const [employees, setEmployees] = useState([]);
   const fetchEmployees = () => {
@@ -25,13 +26,10 @@ function App() {
     return await fetchEmployees();
   }
 
-  useEffect(() => {
-    getEmployees().then((res) => {
-      if (res && res.employees) {
-        setEmployees(...[], res.employees);
-      }
-    })
-  }, []);
+  const updateEmployee = (e, props) => {
+    e.preventDefault();
+    console.log(props.original)
+  }
 
   const columns = [
     {
@@ -52,9 +50,18 @@ function App() {
       Cell: props => <span>{props.value ? 'ACTIVE' : 'DEACTIVATED'}</span>
     },
     {
-      Header: props => <span>Friend Age</span>
+      Header: props => <span>Action</span>,
+      Cell: props => <span>[<a href='javascript(0);' onClick={e=>updateEmployee(e, props)}>Update</a>]</span>
     }
   ];
+
+  useEffect(() => {
+    getEmployees().then((res) => {
+      if (res && res.employees) {
+        setEmployees(...[], res.employees);
+      }
+    })
+  }, []);
 
   return (
     <div className="App">
