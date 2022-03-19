@@ -13,6 +13,7 @@ function App() {
     if (employees) {
       const newArrayEmployee = employees.filter(item => item.id !== employeeId);
       newArrayEmployee.push({...{id:employeeId}, ...information});
+      newArrayEmployee.sort((a, b) => (a.id > b.id) ? 1 : -1)
       setEmployees(newArrayEmployee)
       setModalShow(false);
     }
@@ -24,7 +25,6 @@ function App() {
     const name = allElement.name.value;
     const email = allElement.email.value;
     const status = allElement.status.checked;
-    console.log(status)
     changeEmployees(id, {name:name, email:email, isActive:status})
   };
   const MyVerticallyCenteredModal = (props) => {
@@ -70,7 +70,7 @@ function App() {
                   <Form.Check 
                     type="switch"
                     id="status"
-                    checked="true"
+                    defaultChecked={true}
                   />
                 </Col>
               </Form.Group>
