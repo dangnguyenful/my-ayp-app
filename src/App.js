@@ -1,23 +1,36 @@
-import logo from './logo.svg';
 import './App.css';
+import { useEffect } from 'react';
 
 function App() {
+  const fetchEmployees = () => {
+    return new Promise(resolve => {
+      fetch('employees.json',{
+        headers : { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+         }
+      }).then(function(resp) {
+        return resp.json();
+      })
+      .then(function(employees) {
+        resolve(employees);
+      });
+    });
+  }
+
+  const getEmployees = async () => {
+    return await fetchEmployees();
+  }
+
+  useEffect(() => {
+    getEmployees().then((res) => {
+      console.log(res);
+    })
+  });
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      Get data
     </div>
   );
 }
