@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('Render all columns as requirement', () => {
+test('Render table as requirement', () => {
   render(<App />);
   const idColumn = screen.getByText(/ID/i);
   const nameColumn = screen.getByText(/Name/i);
