@@ -2,6 +2,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css'
+
 function App() {
   const [employees, setEmployees] = useState([]);
   const fetchEmployees = () => {
@@ -27,10 +28,10 @@ function App() {
   useEffect(() => {
     getEmployees().then((res) => {
       if (res && res.employees) {
-        setEmployees(res.employees);
+        setEmployees(...[], res.employees);
       }
     })
-  }, [employees]);
+  }, []);
 
   const columns = [
     {
