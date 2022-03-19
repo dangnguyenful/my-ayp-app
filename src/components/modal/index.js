@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Modal, Button, Form, Row, Col} from 'react-bootstrap';
 
 function MyVerticallyCenteredModal(props) {
-  const { informationPopup, handleSubmit } = props;
+  const { informationPopup, handlesubmit } = props;
   return (
     <Modal
       {...props}
@@ -11,7 +11,7 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Form onSubmit={e => handleSubmit(e)}>
+      <Form onSubmit={e => handlesubmit(e)}>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
             Update employee information

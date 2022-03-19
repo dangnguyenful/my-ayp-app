@@ -1,32 +1,47 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Modal, Button, Form, Row, Col} from 'react-bootstrap';
 import MyVerticallyCenteredModal from './components/modal';
+
+const employeesArrays = [];
+const changeEmployees = (currentEmployeesArray, updateInformation) => {
+  const employeeId = updateInformation.id;
+  const newArrayEmployee = currentEmployeesArray.filter(item => item.id !== employeeId);
+  newArrayEmployee.push(updateInformation);
+  newArrayEmployee.sort((a, b) => (a.id > b.id) ? 1 : -1);
+  return newArrayEmployee;
+}
+function changeEmployeesArray(employees, action) {
+  switch (action.type) {
+    case 'fetchFromServer':
+      return [...[], ...action.newEmployee];
+    case 'changeInformation':
+      return changeEmployees(employees, action.updateInformation);
+    default:
+      throw new Error();
+  }
+}
+
 function App() {
-  const [employees, setEmployees] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [informationPopup, setInformationPopup] = useState({});
-  const changeEmployees = (id, information) => {
-    const employeeId = parseInt(id);
-    if (employees) {
-      const newArrayEmployee = employees.filter(item => item.id !== employeeId);
-      newArrayEmployee.push({...{id:employeeId}, ...information});
-      newArrayEmployee.sort((a, b) => (a.id > b.id) ? 1 : -1)
-      setEmployees(newArrayEmployee)
-      setModalShow(false);
-    }
-  }
-  const handleSubmit = (e) => {
+  const [employees, dispatch] = useReducer(changeEmployeesArray, employeesArrays);
+
+  const handlesubmit = (e) => {
     e.preventDefault();
     const allElement = e.target.elements;
     const id = allElement.employeeId.value;
     const name = allElement.name.value;
     const email = allElement.email.value;
     const status = allElement.status.checked;
-    changeEmployees(id, {name:name, email:email, isActive:status})
+    if (!id) return;
+    setModalShow(false);
+    dispatch({
+      type: 'changeInformation', 
+      updateInformation: { id: parseInt(id), name: name, email: email, isActive: status }
+    });
   };
   
   const fetchEmployees = () => {
@@ -88,7 +103,7 @@ function App() {
   useEffect(() => {
     getEmployees().then((res) => {
       if (res && res.employees) {
-        setEmployees(...[], res.employees);
+        dispatch({type: 'fetchFromServer', newEmployee: res.employees});
       }
     })
   }, []);
@@ -98,7 +113,7 @@ function App() {
       <MyVerticallyCenteredModal
         show={modalShow}
         informationPopup = {informationPopup}
-        handleSubmit = {handleSubmit}
+        handlesubmit = {handlesubmit}
         onHide={() => setModalShow(false)}
       />
       <ReactTable
