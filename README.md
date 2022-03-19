@@ -40,17 +40,6 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 - Event fetch data from dummy, update information use Redux. => Easy to add function.
 ### 2. Setup instructions, but not limited to required system requirements.
 ### 3. Overview of React components created and why you design them in such a way.
-- My design easy for newbie to learn the project : 
-  `
-  --components
-     --modal
-     --form
-     --....
-  --utils
-     --employees
-     --number
-     --datetime
-     --...
-  `
+- My design easy for newbie to learn the project.
 
 
