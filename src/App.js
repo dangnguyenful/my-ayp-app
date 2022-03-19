@@ -6,18 +6,26 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Modal, Button, Form, Row, Col} from 'react-bootstrap';
 function App() {
   const [employees, setEmployees] = useState([]);
-  const [validated, setValidated] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [informationPopup, setInformationPopup] = useState({});
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    console.log(form)
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
+  const changeEmployees = (id, information) => {
+    const employeeId = parseInt(id);
+    if (employees) {
+      const newArrayEmployee = employees.filter(item => item.id !== employeeId);
+      newArrayEmployee.push({...{id:employeeId}, ...information});
+      setEmployees(newArrayEmployee)
+      setModalShow(false);
     }
-
-    setValidated(true);
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const allElement = e.target.elements;
+    const id = allElement.employeeId.value;
+    const name = allElement.name.value;
+    const email = allElement.email.value;
+    const status = allElement.status.checked;
+    console.log(status)
+    changeEmployees(id, {name:name, email:email, isActive:status})
   };
   const MyVerticallyCenteredModal = (props) => {
     return (
@@ -27,14 +35,14 @@ function App() {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Form noValidate validated={validated} onSubmit={e => handleSubmit(e)}>
+        <Form onSubmit={e => handleSubmit(e)}>
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title-vcenter">
               Update employee information
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-              <Form.Group as={Row} className="mb-3" controlId="nameElement">
+              <Form.Group as={Row} className="mb-3" controlId="name">
                 <Form.Label column sm="2">Name</Form.Label>
                 <Col sm="10">
                   <Form.Control
@@ -45,7 +53,7 @@ function App() {
                   />
                 </Col>
               </Form.Group>
-              <Form.Group as={Row} className="mb-3" controlId="emailElement">
+              <Form.Group as={Row} className="mb-3" controlId="email">
                 <Form.Label column sm="2">Email</Form.Label>
                 <Col sm="10">
                   <Form.Control
@@ -56,6 +64,17 @@ function App() {
                   />
                 </Col>
               </Form.Group>
+              <Form.Group as={Row} className="mb-3" controlId="status">
+                <Form.Label column sm="2">Status</Form.Label>
+                <Col sm="10">
+                  <Form.Check 
+                    type="switch"
+                    id="status"
+                    checked="true"
+                  />
+                </Col>
+              </Form.Group>
+              <input type="hidden" id="employeeId" name="employeeId" value={informationPopup.id}></input>
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={props.onHide} variant="light">Close</Button>
