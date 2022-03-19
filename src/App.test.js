@@ -1,8 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('Render all columns as requirement', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const idColumn = screen.getByText(/ID/i);
+  const nameColumn = screen.getByText(/Name/i);
+  const emailColumn = screen.getByText(/Email/i);
+  const statusColumn = screen.getByText(/Status/i);
+  const actionColumn = screen.getByText(/Action/i);
+  expect(idColumn).toBeInTheDocument();
+  expect(nameColumn).toBeInTheDocument();
+  expect(emailColumn).toBeInTheDocument();
+  expect(statusColumn).toBeInTheDocument();
+  expect(actionColumn).toBeInTheDocument();
 });
