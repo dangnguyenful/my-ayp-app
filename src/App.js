@@ -51,7 +51,13 @@ function App() {
     },
     {
       Header: props => <span>Action</span>,
-      Cell: props => <span>[<a href='javascript(0);' onClick={e=>updateEmployee(e, props)}>Update</a>]</span>
+      Cell: props => <span>
+        [
+          {props.original.isActive ? 
+            <a href='javascript(0);' onClick={e=>updateEmployee(e, props)}>Update</a> : <span>Disabled</span>
+          }
+        ]
+      </span>
     }
   ];
 
