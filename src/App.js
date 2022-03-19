@@ -3,38 +3,68 @@ import { useEffect, useState } from 'react';
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-function MyVerticallyCenteredModal(props) {
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Modal heading
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <h4>Centered Modal</h4>
-        <p>
-          Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-          dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-          consectetur ac, vestibulum at eros.
-        </p>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
+import {Modal, Button, Form, Row, Col} from 'react-bootstrap';
 function App() {
   const [employees, setEmployees] = useState([]);
+  const [validated, setValidated] = useState(false);
   const [modalShow, setModalShow] = useState(false);
+  const [informationPopup, setInformationPopup] = useState({});
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    console.log(form)
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setValidated(true);
+  };
+  const MyVerticallyCenteredModal = (props) => {
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Form noValidate validated={validated} onSubmit={e => handleSubmit(e)}>
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Update employee information
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+              <Form.Group as={Row} className="mb-3" controlId="nameElement">
+                <Form.Label column sm="2">Name</Form.Label>
+                <Col sm="10">
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Name"
+                    defaultValue={informationPopup.name}
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Group as={Row} className="mb-3" controlId="emailElement">
+                <Form.Label column sm="2">Email</Form.Label>
+                <Col sm="10">
+                  <Form.Control
+                    required
+                    type="email"
+                    placeholder="Name"
+                    defaultValue={informationPopup.email}
+                  />
+                </Col>
+              </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={props.onHide} variant="light">Close</Button>
+            <Button variant="primary" type="submit">Save</Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+    );
+  };
   const fetchEmployees = () => {
     return new Promise(resolve => {
       fetch('employees.json',{
@@ -57,8 +87,8 @@ function App() {
 
   const updateEmployee = (e, props) => {
     e.preventDefault();
+    setInformationPopup(props.original);
     setModalShow(true);
-    console.log(props.original)
   }
 
   const columns = [
